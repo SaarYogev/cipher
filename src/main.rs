@@ -17,7 +17,7 @@ struct Opt {
 
 trait CipherType {
     fn get_name(&self) -> &str;
-    fn cipher(&self, text: &str) -> &str;
+    fn cipher(&self, text: &str) -> String;
 }
 
 fn main() {
@@ -28,7 +28,7 @@ fn main() {
         ciphers.insert(name, cipher_box);
     }
     let args = Opt::from_args();
-    ciphers.get(args.cipher.as_str()).unwrap().cipher(&args.text);
+    println!("{}", ciphers.get(args.cipher.as_str()).unwrap().cipher(&args.text));
 }
 
 struct CesarCipher;
@@ -38,8 +38,10 @@ impl CipherType for CesarCipher {
         return "Cesar";
     }
 
-    fn cipher(&self, text: &str) -> &str{
-        unimplemented!()
+    fn cipher(&self, text: &str) -> String{
+        let bytes: std::str::Bytes = text.bytes().into_iter();
+        let chars: String = bytes.map(|character| (character + 1) as char).collect();
+        return chars;
     }
 }
 
@@ -50,7 +52,7 @@ impl CipherType for FenceCipher {
         return "Fence";
     }
 
-    fn cipher(&self, text: &str) -> &str{
+    fn cipher(&self, text: &str) -> String{
         unimplemented!()
     }
 }
