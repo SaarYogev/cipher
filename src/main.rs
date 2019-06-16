@@ -21,11 +21,11 @@ trait CipherType {
 }
 
 fn main() {
-    let ciphers_vec: Vec<Box<CipherType>> = vec![Box::new(CesarCipher), Box::new(FenceCipher)];
-    let mut ciphers: HashMap<&str, Box<CipherType>> = HashMap::new();
-    for cipher in ciphers_vec {
-        let name = cipher.get_name();
-        ciphers.insert(name, cipher);
+    let ciphers_vec: Vec<&CipherType> = vec![&CesarCipher, &FenceCipher];
+    let mut ciphers: HashMap<&str, &CipherType> = HashMap::new();
+    for cipher_box in ciphers_vec {
+        let name = cipher_box.get_name();
+        ciphers.insert(name, cipher_box);
     }
     let args = Opt::from_args();
     ciphers.get(args.cipher.as_str()).unwrap().cipher(&args.text);
