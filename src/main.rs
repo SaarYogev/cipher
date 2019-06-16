@@ -16,19 +16,28 @@ struct Opt {
 }
 
 trait CipherType {
+    fn get_name(&self) -> &str;
     fn cipher(&self, text: &str) -> &str;
 }
 
 fn main() {
-    let args = Opt::from_args();
+    let ciphers_vec: Vec<Box<CipherType>> = vec![Box::new(CesarCipher), Box::new(FenceCipher)];
     let mut ciphers: HashMap<&str, Box<CipherType>> = HashMap::new();
-    ciphers.insert("Cesar", Box::new(CesarCipher));
-    ciphers.insert("Fence", Box::new(FenceCipher));
+    for cipher in ciphers_vec {
+        let name = cipher.get_name();
+        ciphers.insert(name, cipher);
+    }
+    let args = Opt::from_args();
     ciphers.get(args.cipher.as_str()).unwrap().cipher(&args.text);
 }
 
 struct CesarCipher;
 impl CipherType for CesarCipher {
+
+    fn get_name(&self) -> &str {
+        return "Cesar";
+    }
+
     fn cipher(&self, text: &str) -> &str{
         unimplemented!()
     }
@@ -36,6 +45,11 @@ impl CipherType for CesarCipher {
 
 struct FenceCipher;
 impl CipherType for FenceCipher {
+
+    fn get_name(&self) -> &str {
+        return "Fence";
+    }
+
     fn cipher(&self, text: &str) -> &str{
         unimplemented!()
     }
